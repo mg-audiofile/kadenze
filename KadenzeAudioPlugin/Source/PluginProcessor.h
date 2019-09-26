@@ -12,6 +12,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "KAPGain.h"
+#include <memory>
+
+using std::unique_ptr;
+
 //==============================================================================
 /**
 */
@@ -56,6 +61,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+
+	void initDSP();
+
+	unique_ptr<KAPGain> mGain[2];
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeAudioPluginAudioProcessor)
 };

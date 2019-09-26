@@ -155,6 +155,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer,
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...
+		mGain[channel]->process(channelData, 0.5f, channelData, buffer.getNumSamples());
     }
 }
 
@@ -181,6 +182,13 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void KadenzeAudioPluginAudioProcessor::initDSP()
+{
+	for (int i = 0; i < 2; i++) {
+		mGain[i] = std::unique_ptr<KAPGain>(new KAPGain);
+	}
 }
 
 //==============================================================================
