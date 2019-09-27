@@ -97,12 +97,18 @@ void KadenzeAudioPluginAudioProcessor::prepareToPlay (double sampleRate, int sam
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+	for (int i = 0; i < 2; i++) {
+		mDelay[i]->setSampleRate(sampleRate);
+	}
 }
 
 void KadenzeAudioPluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+	for (int i = 0; i < 2; i++) {
+		mDelay[i]->reset();
+	}
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -156,6 +162,8 @@ void KadenzeAudioPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer,
 
         // ..do something to the data...
 		mGain[channel]->process(channelData, 0.5f, channelData, buffer.getNumSamples());
+
+		mDelay[channel]->process(channelData, 0.25, 0.5, 0.35, channelData, buffer.getNumSamples());
     }
 }
 
@@ -188,6 +196,7 @@ void KadenzeAudioPluginAudioProcessor::initDSP()
 {
 	for (int i = 0; i < 2; i++) {
 		mGain[i] = std::unique_ptr<KAPGain>(new KAPGain);
+		mDelay[i] = std::unique_ptr<KAPDelay>(new KAPDelay);
 	}
 }
 

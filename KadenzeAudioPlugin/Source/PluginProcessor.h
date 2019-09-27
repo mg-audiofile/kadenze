@@ -13,6 +13,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "KAPGain.h"
+#include "KAPDelay.h"
 #include <memory>
 
 using std::unique_ptr;
@@ -65,6 +66,7 @@ private:
 	void initDSP();
 
 	unique_ptr<KAPGain> mGain[2];
+	unique_ptr<KAPDelay> mDelay[2];
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeAudioPluginAudioProcessor)
