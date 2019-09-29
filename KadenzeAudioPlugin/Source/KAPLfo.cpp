@@ -9,3 +9,29 @@
 */
 
 #include "KAPLfo.h"
+#include "JuceHeader.h"
+
+KAPLfo::KAPLfo()
+{
+	reset();
+}
+
+KAPLfo::~KAPLfo()
+{
+
+}
+
+void KAPLfo::reset()
+{
+	mPhase = 0.0f;
+}
+
+void KAPLfo::setSampleRate(double inSampleRate)
+{
+
+}
+
+void KAPLfo::process(float inRate, float inDepth, int inNumSamples)
+{
+
+}
