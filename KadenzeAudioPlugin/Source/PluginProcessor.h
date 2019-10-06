@@ -14,6 +14,7 @@
 
 #include "KAPGain.h"
 #include "KAPDelay.h"
+#include "KAPLfo.h"
 #include <memory>
 
 using std::unique_ptr;
@@ -67,6 +68,7 @@ private:
 
 	unique_ptr<KAPGain> mGain[2];
 	unique_ptr<KAPDelay> mDelay[2];
+	unique_ptr<KAPLfo> mLfo[2];
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeAudioPluginAudioProcessor)

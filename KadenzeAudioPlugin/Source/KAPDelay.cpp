@@ -35,12 +35,13 @@ void KAPDelay::reset()
 	zeromem(mBuffer, sizeof(double) * maxBufferDelaySize);
 }
 
-void KAPDelay::process(float* inAudio,
-	float inTime,
-	float inFeedback,
-	float inWetDry,
-	float* outAudio,
-	int inNumSamplesToRender)
+void KAPDelay::process( float* inAudio,
+						float inTime,
+						float inFeedback,
+						float inWetDry,
+						float* inModulationBuffer,
+						float* outAudio,
+						int inNumSamplesToRender )
 {
 	const float wet = inWetDry;
 	const float dry = 1.0f - wet;
@@ -48,6 +49,7 @@ void KAPDelay::process(float* inAudio,
 
 	for (int i = 0; i < inNumSamplesToRender; i++) {
 
+		const double delayTimeModulation = (0.003 + (0.002 * inModulationBuffer[i]));
 		const double delayTimeInSamples = (inTime * mSampleRate);
 		const double sample = getInterpolatedSample(delayTimeInSamples);
 
