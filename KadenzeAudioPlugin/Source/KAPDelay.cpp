@@ -14,7 +14,9 @@
 
 KAPDelay::KAPDelay()
 	: mSampleRate(-1),
+	mBuffer(),
 	mFeedbackSample(0.0),
+	mTimeSmoothed(0.0f),
 	mDelayIndex(0)
 {
 
@@ -32,6 +34,7 @@ void KAPDelay::setSampleRate(double inSampleRate)
 
 void KAPDelay::reset()
 {
+	mTimeSmoothed = 0.0f;
 	zeromem(mBuffer, sizeof(double) * maxBufferDelaySize);
 }
 
@@ -47,10 +50,15 @@ void KAPDelay::process( float* inAudio,
 	const float dry = 1.0f - wet;
 	const float feedbackMapped = jmap(inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
 
+	const double delayTimeModulation = (0.003 + (0.002 * inModulationBuffer[0]));
+
+	// --- Block level smoothing
+	mTimeSmoothed = mTimeSmoothed - kParamSmoothingCoeff_Rough * (mTimeSmoothed - (inTime * delayTimeModulation));
+
 	for (int i = 0; i < inNumSamplesToRender; i++) {
 
-		const double delayTimeModulation = (0.003 + (0.002 * inModulationBuffer[i]));
-		const double delayTimeInSamples = (inTime * mSampleRate);
+		const double delayTimeInSamples = (mTimeSmoothed * mSampleRate);
+
 		const double sample = getInterpolatedSample(delayTimeInSamples);
 
 		mBuffer[mDelayIndex] = inAudio[i] + (mFeedbackSample * feedbackMapped);
